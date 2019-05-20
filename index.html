@@ -1,10 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Best Game Ever!</title>
-  </head>
-  <body>
+
+<head>
+  <meta charset="utf-8">
+  <title>LEGO WORLD - BATMAN</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body class="container">
+    <h1 class="center"> LEGO WORLD - BATMAN CATCH MONSTER</h1>
+  <div class="container-fluid  row">
+    <div class="col-sm-8">
+        <button class="btn btn-primary" onclick="startGame()">start game</button>
+        <button class="btn btn-primary" onclick="resetGame()">reset</button>
+      <canvas id="canvas"> </canvas>
+    </div>
+    <div class="col-sm-4">
+      
+      <div>
+         
+        <p> Help BATMAN catch 20 monsters for win, but not catch the BOOM</p>
+        <p> Have fun</p>
+        <p> </p>
+      </div>
+    </div>
+
+
     <script src="game.js"></script>
-  </body>
+</body>
+
 </html>

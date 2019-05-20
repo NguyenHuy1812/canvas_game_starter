@@ -9,30 +9,43 @@ Here, we create and add our "canvas" to the page.
 We also load all of our images. 
 */
 
-
-let canvas;
+let speed = 0;
+let canvas = document.getElementById('canvas')
 let ctx;
+let score = 0
+let gameStarted = false
 
-canvas = document.createElement("canvas");
+
 ctx = canvas.getContext("2d");
 canvas.width = 512;
 canvas.height = 480;
+
 document.body.appendChild(canvas);
 
-let bgReady, heroReady, monsterReady;
-let bgImage, heroImage, monsterImage;
+let bgReady, heroReady, monsterReady, trapReady;
+let bgImage, heroImage, trapImage;
+var lastIndex = 0;
+
+var monsterImage = ["images/monster1.png", "images/monster2.png", "images/monster3.png", "images/monster4.png", "images/monster5.png"];
 
 let startTime = Date.now();
-const SECONDS_PER_ROUND = 30;
+const SECONDS_PER_ROUND = 120;
+console.log(SECONDS_PER_ROUND)
+
 let elapsedTime = 0;
 
+// function randomImageMonster() {
+//   var num = Math.floor(Math.random() * 3);
+//   return monsterImage[num];
+// };
 function loadImages() {
   bgImage = new Image();
   bgImage.onload = function () {
     // show the background image
     bgReady = true;
   };
-  bgImage.src = "images/background.png";
+  bgImage.src = "images/bg-lego.png";
+
   heroImage = new Image();
   heroImage.onload = function () {
     // show the hero image
@@ -40,12 +53,19 @@ function loadImages() {
   };
   heroImage.src = "images/hero.png";
 
+  trapImage = new Image();
+  trapImage.onload = function () {
+    // show the hero image
+    trapReady = true;
+  };
+  trapImage.src = "images/trap.png";
+
   monsterImage = new Image();
   monsterImage.onload = function () {
     // show the monster image
     monsterReady = true;
   };
-  monsterImage.src = "images/monster.png";
+  monsterImage.src = ["images/monster1.png", "images/monster2.png", "images/monster3.png", "images/monster4.png", "images/monster5.png"][Math.floor(Math.random() * 5)]
 }
 
 /** 
@@ -59,11 +79,20 @@ function loadImages() {
  */
 
 let heroX = canvas.width / 2;
+console.log("Xtest", heroX)
 let heroY = canvas.height / 2;
+console.log("Xtest", heroY)
 
 let monsterX = 100;
 let monsterY = 100;
 
+let trapX = 50;
+let trapY = 50;
+
+// let monsterX = 100;
+// let monsterY = 100;
+let monsterDirectionX = 1;
+let monsterDirectionY = 1;
 /** 
  * Keyboard Listeners
  * You can safely ignore this part, for now. 
@@ -91,73 +120,192 @@ function setupKeyboardListeners() {
  *  If you change the value of 5, the player will move at a different rate.
  */
 let update = function () {
-  // Update the time.
-  elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+  if (gameStarted) {
+    // Update the time.
+    elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+    console.log(elapsedTime)
+    if (SECONDS_PER_ROUND - elapsedTime == 0) {
+      alert(' You die ! Try agian later')
+      return resetGame()
+    }
+    if (gameStarted) {
+      if (38 in keysDown) { // Player is holding up key
+        heroY -= 5;
+
+      }
+      if (40 in keysDown) { // Player is holding down key
+        heroY += 5;
+
+      }
+      if (37 in keysDown) { // Player is holding left key
+        heroX -= 5;
+
+      }
+      if (39 in keysDown) { // Player is holding right key
+        heroX += 5;
+
+      }
+    }
+
+    // keysdown
+
+    
+    speed = 3
+    if (score > 2 && score <= 10) {
+      speed = 6
+    }
+    if (score > 10 && score < 20) {
+      speed = 10
+    }
+
+      monsterX = monsterX + monsterDirectionX * speed
+
+      if (monsterX > canvas.width - 32 || monsterX < 0) {
+        monsterDirectionX = - monsterDirectionX
+      }
+      monsterY = monsterY + monsterDirectionY * speed
+      if (monsterY > canvas.height || monsterY < 0) {
+        monsterDirectionY = - monsterDirectionY
+      }
+
+      trapX = trapX + monsterDirectionX*(speed-2)
+      if (trapX > canvas.width - 32 || trapX < 0) {
+        monsterDirectionX = - monsterDirectionX
+      }
+      trapY = trapY + monsterDirectionY*(speed-2)
+
+      if (trapY > canvas.height || trapY < 0) {
+        monsterDirectionY = - monsterDirectionY
+      }
+
+      // Check if player and monster collided. Our images
+      // are about 32 pixels big.
+      if (
+        heroX <= (trapX + 32)
+        && trapX <= (heroX + 32)
+        && heroY <= (trapY + 32)
+        && trapY <= (heroY + 32)
+      ) {
+        alert(' You die ! Try agian later')
+        return resetGame()
+
+      }
+      if (
+        heroX <= (monsterX + 32)
+        && monsterX <= (heroX + 32)
+        && heroY <= (monsterY + 32)
+        && monsterY <= (heroY + 32)
+      ) {
+        // Pick a new location for the monster.
+        // Note: Change this to place the monster at a new, random location.
+        // update location of hero & monster
+
+        monsterX = Math.round(Math.random() * (canvas.width - 32));
+        monsterY = Math.round(Math.random() * canvas.height)
+        trapX = Math.round(Math.random() * (canvas.width - 32));
+        trapY = Math.round(Math.random() * canvas.height)
 
 
-  if (38 in keysDown) { // Player is holding up key
-    heroY -= 5;
-  }
-  if (40 in keysDown) { // Player is holding down key
-    heroY += 5;
-  }
-  if (37 in keysDown) { // Player is holding left key
-    heroX -= 5;
-  }
-  if (39 in keysDown) { // Player is holding right key
-    heroX += 5;
-  }
+        monsterImage.src = ["images/monster1.png", "images/monster2.png", "images/monster3.png", "images/monster4.png", "images/monster5.png"][Math.floor(Math.random() * 5)]
+        score = score + 1
+      }
 
-  // Check if player and monster collided. Our images
-  // are about 32 pixels big.
-  if (
-    heroX <= (monsterX + 32)
-    && monsterX <= (heroX + 32)
-    && heroY <= (monsterY + 32)
-    && monsterY <= (heroY + 32)
-  ) {
-    // Pick a new location for the monster.
-    // Note: Change this to place the monster at a new, random location.
-    monsterX = monsterX + 50;
-    monsterY = monsterY + 70;
-  }
-};
 
-/**
- * This function, render, runs as often as possible.
- */
-var render = function () {
-  if (bgReady) {
-    ctx.drawImage(bgImage, 0, 0);
-  }
-  if (heroReady) {
-    ctx.drawImage(heroImage, heroX, heroY);
-  }
-  if (monsterReady) {
-    ctx.drawImage(monsterImage, monsterX, monsterY);
-  }
-  ctx.fillText(`Seconds Remaining: ${SECONDS_PER_ROUND - elapsedTime}`, 20, 100);
-};
+      if (score == 20) {
+        alert(`congratulation, your elapse time is ${elapsedTime}`)
+        return resetGame()
 
-/**
- * The main game loop. Most every game will have two distinct parts:
- * update (updates the state of the game, in this case our hero and monster)
- * render (based on the state of our game, draw the right things)
- */
-var main = function () {
-  update(); 
-  render();
-  // Request to do this again ASAP. This is a special method
-  // for web browsers. 
-  requestAnimationFrame(main);
-};
+      }
+      //
 
-// Cross-browser support for requestAnimationFrame.
-// Safely ignore this line. It's mostly here for people with old web browsers.
-var w = window;
-requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || w.mozRequestAnimationFrame;
+      heroY >= canvas.height ? heroY = 512 : null;
+      heroX >= canvas.width ? heroX = 480 : null;
+      heroY < 0 ? heroY = 0 : null;
+      heroX < 0 ? heroX = 0 : null;
 
-// Let's play this game!
-loadImages();
-setupKeyboardListeners();
-main();
+      // monsterY >= canvas.height ? monsterY = 512 : null;
+      // monsterX >= canvas.width ? monsterX = 480 : null;
+      // monsterY < 0 ? monsterY = 0 : null;
+      // monsterX < 0 ? monsterX = 0 : null;
+      // trapY >= canvas.height ? trapY = 512 : null;
+      // trapX >= canvas.width ? trapX = 480 : null;
+      // trapY < 0 ? trapY = 0 : null;
+      // trapX < 0 ? trapX = 0 : null;
+
+    }
+  };
+
+  /**
+   * This function, render, runs as often as possible.
+   */
+
+  var render = function () {
+    if (bgReady) {
+      ctx.drawImage(bgImage, 0, 0);
+    }
+    if (heroReady) {
+      ctx.drawImage(heroImage, heroX, heroY);
+    }
+    if (monsterReady) {
+      ctx.drawImage(monsterImage, monsterX, monsterY);
+    }
+    if (trapReady) {
+      ctx.drawImage(trapImage, trapX, trapY);
+    }
+
+    ctx.fillStyle = "red";
+    ctx.font = "bold 20px Helvetica, Arial, sans-serif";
+    ctx.fillText(`Seconds Remaining: ${SECONDS_PER_ROUND - elapsedTime}`, 20, 50);
+    ctx.fillText(`Score: ${score}`, 20, 100);
+
+
+
+
+  };
+
+  /**
+   * The main game loop. Most every game will have two distinct parts:
+   * update (updates the state of the game, in this case our hero and monster)
+   * render (based on the state of our game, draw the right things)
+   */
+
+
+  var main = function () {
+    update();
+    render();
+    // Request to do this again ASAP. This is a special method
+    // for web browsers. 
+    requestAnimationFrame(main);
+  };
+
+  // Cross-browser support for requestAnimationFrame.
+  // Safely ignore this line. It's mostly here for people with old web browsers.
+  var w = window;
+  requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || w.mozRequestAnimationFrame;
+
+  loadImages();
+  setupKeyboardListeners();
+  main();
+
+
+  function startGame() {
+    gameStarted = true
+
+  }
+  function resetGame() {
+    gameStarted = false
+    score = 0
+    elapsedTime = 0
+    monsterX = 100
+    monsterY = 100
+    console.log('elaptime reset', elapsedTime)
+    startTime = Date.now()
+    canvas.width = 512;
+    canvas.height = 480;
+    trapX = 50;
+    trapY = 50;
+    heroX = 250;
+    console.log("Xtestreset", heroX)
+    heroY = 250;
+    console.log("Xtestreset", heroY)
+  }
