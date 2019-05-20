@@ -6,7 +6,7 @@ This is a simple Canvas-based game that requires a solid understanding of the pr
  
 ## Online game here
 
-! [] (https://musing-panini-f5b231.netlify.com)
+! (https://musing-panini-f5b231.netlify.com)
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories.
