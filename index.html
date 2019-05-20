@@ -8,26 +8,45 @@
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 
-<body class="container">
-    <h1 class="center"> LEGO WORLD - BATMAN CATCH MONSTER</h1>
-  <div class="container-fluid  row">
-    <div class="col-sm-8">
-        <button class="btn btn-primary" onclick="startGame()">start game</button>
-        <button class="btn btn-primary" onclick="resetGame()">reset</button>
-      <canvas id="canvas"> </canvas>
-    </div>
-    <div class="col-sm-4">
-      
-      <div>
-         
-        <p> Help BATMAN catch 20 monsters for win, but not catch the BOOM</p>
-        <p> Have fun</p>
-        <p> </p>
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-4 col-12">
+        <h1 class="text-center text-danger font-weight-bold py-3">BATMAN CATCHER</h1>
+        <div>
+          <p>Help BATMAN to catch the monster as fast as you can</p>
+          <li>Using up and down key to move the Batman</li>
+          <li>Don't touch the Boom, It dangerous</li>
+          <li>You have 120s to catch 20 monsters</li>
+
+          <br>
+        </div>
+        <div>
+          <button id="startgame" onclick="startGame()">Start Game</button>
+          <button id="resetgame" onclick="resetGame()">Reset game</button>
+        </div>
+
+      </div>
+      <div class="col-lg-8 col-12">
+        <canvas id="canvas" width="512" height="480"></canvas>
       </div>
     </div>
+  </div>
+  <script src="game.js"></script>
 
 
-    <script src="game.js"></script>
+
+
+
+
 </body>
+
+
+
+
+
+
+
+</div>
 
 </html>
