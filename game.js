@@ -115,18 +115,18 @@ function setupKeyboardListeners() {
  */
 let update = function () {
   if (gameStarted) {
-    if (
-      heroX <= (trapX + 32)
-      && trapX <= (heroX + 32)
-      && heroY <= (trapY + 32)
-      && trapY <= (heroY + 32)
-    ) {
-      alert(' You die ! Try agian later')
-      gameStarted = false
-      heroX = canvas.width / 2;
-      heroY = canvas.height / 2;
-      return resetGame()
-    }
+    // if (
+    //   heroX <= (trapX + 32)
+    //   && trapX <= (heroX + 32)
+    //   && heroY <= (trapY + 32)
+    //   && trapY <= (heroY + 32)
+    // ) {
+    //   alert(' You die ! Try agian later')
+    //   gameStarted = false
+    //   heroX = canvas.width / 2;
+    //   heroY = canvas.height / 2;
+    //   return resetGame()
+    // }
     // Update the time.
     elapsedTime = Math.floor((Date.now() - startTime) / 1000);
     console.log(elapsedTime)
